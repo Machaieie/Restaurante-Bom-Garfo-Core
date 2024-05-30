@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.AuthenticationResponse;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.Response;
@@ -11,6 +12,7 @@ import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.User;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.RegistrationRequestDTO;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services.AuthenticationService;
 
+@RestController 
 public class AuthenticationController {
      @Autowired
     private AuthenticationService authenticationService;
