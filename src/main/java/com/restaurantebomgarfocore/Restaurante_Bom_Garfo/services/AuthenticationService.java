@@ -41,6 +41,8 @@ public class AuthenticationService {
       User.setFirstName(request.firstName());
       User.setLastName(request.lastName());
       User.setUsername(request.username());
+      User.setEmail(request.email());
+      User.setPhone(request.phone());
       User.setPassword(passwordEncoder.encode(request.password()));
       User.addRole(new UserRole(request.role()));
 
@@ -65,6 +67,8 @@ public class AuthenticationService {
          response.setFirstName(User.getFirstName());
          response.setLastName(User.getLastName());
          response.setUsername(userDetails.getUsername());
+         response.setEmail(User.getEmail());
+         response.setPhone(User.getPhone());
          response.setRoles(roles);
          response.setToken(token);
          return response;

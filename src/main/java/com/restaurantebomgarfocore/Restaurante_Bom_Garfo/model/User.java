@@ -45,7 +45,7 @@ public class User implements UserDetails {
     private String email;
 
      @JsonIgnore
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<UserRole> role = new HashSet<>();
     
     
