@@ -36,7 +36,7 @@ import lombok.Setter;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  int id;
+    private  long id;
     private String firstName;
     private String lastName;
     private String username;
@@ -45,7 +45,7 @@ public class User implements UserDetails {
     private String email;
 
      @JsonIgnore
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<UserRole> role = new HashSet<>();
     
     
