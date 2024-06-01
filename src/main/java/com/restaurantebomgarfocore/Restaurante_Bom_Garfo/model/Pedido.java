@@ -2,6 +2,9 @@ package com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model;
 
 import java.io.Serializable;
 import java.util.List;
+
+import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.enums.StatusPedido;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,10 +25,8 @@ public class Pedido implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String codPedido;
-    private String dataHoraPedido;
-    private String statusPedido;
-    private String observacoes;
+    private StatusPedido statusPedido;
+    
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itensPedido;

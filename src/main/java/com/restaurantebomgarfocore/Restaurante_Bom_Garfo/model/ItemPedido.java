@@ -24,5 +24,6 @@ public class ItemPedido {
     private Pedido pedido;
     private String nomeItem;
     private String descricaoItem;
+    private int quantidade;
     private double precoUnitario;
 }
