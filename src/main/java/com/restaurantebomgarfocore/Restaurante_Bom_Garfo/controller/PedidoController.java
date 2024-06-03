@@ -21,28 +21,28 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     // Endpoint para criar um novo pedido
-    @PostMapping
+    @PostMapping("adicionarPedido")
     public ResponseEntity<PedidoDTO> createPedido(@RequestBody PedidoDTO pedidoDTO) {
         PedidoDTO savedPedidoDTO = pedidoService.save(pedidoDTO);
         return new ResponseEntity<>(savedPedidoDTO, HttpStatus.CREATED);
     }
 
     // Endpoint para buscar todos os pedidos
-    @GetMapping
+    @GetMapping("pedidos")
     public ResponseEntity<List<PedidoDTO>> getAllPedidos() {
         List<PedidoDTO> pedidos = pedidoService.findAll();
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
 
     // Endpoint para buscar um pedido por ID
-    @GetMapping("/{id}")
+    @GetMapping("/pedido/{id}")
     public ResponseEntity<PedidoDTO> getPedidoById(@PathVariable Long id) {
         PedidoDTO pedidoDTO = pedidoService.findById(id);
         return new ResponseEntity<>(pedidoDTO, HttpStatus.OK);
     }
 
     // Endpoint para excluir um pedido por ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/pedido/{id}")
     public ResponseEntity<Void> deletePedidoById(@PathVariable Long id) {
         pedidoService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

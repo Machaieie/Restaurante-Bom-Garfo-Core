@@ -17,21 +17,21 @@ public class PagamentoController {
     private PagamentoService pagamentoService;
 
     // Endpoint para criar um novo pagamento
-    @PostMapping
+    @PostMapping("adicionarPagamento")
     public ResponseEntity<Pagamento> createPagamento(@RequestBody Pagamento pagamento) {
         Pagamento savedPagamento = pagamentoService.save(pagamento);
         return new ResponseEntity<>(savedPagamento, HttpStatus.CREATED);
     }
 
     // Endpoint para buscar todos os pagamentos
-    @GetMapping
+    @GetMapping("pagamentos")
     public ResponseEntity<List<Pagamento>> getAllPagamentos() {
         List<Pagamento> pagamentos = pagamentoService.findAll();
         return new ResponseEntity<>(pagamentos, HttpStatus.OK);
     }
 
     // Endpoint para buscar um pagamento por ID
-    @GetMapping("/{id}")
+    @GetMapping("/pagamento/{id}")
     public ResponseEntity<Pagamento> getPagamentoById(@PathVariable long id) {
         Pagamento pagamento = pagamentoService.findById(id);
         return new ResponseEntity<>(pagamento, HttpStatus.OK);

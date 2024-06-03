@@ -18,35 +18,35 @@ public class ReservaController {
     private ReservaService reservaService;
 
     // Endpoint para criar uma nova reserva
-    @PostMapping
+    @PostMapping("/adicionarReserva")
     public ResponseEntity<String> createReserva(@RequestBody ReservaDTO reservaDTO) {
         String response = reservaService.save(reservaDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // Endpoint para buscar todas as reservas
-    @GetMapping
+    @GetMapping("/pegarTodos")
     public ResponseEntity<List<Reserva>> getAllReservas() {
         List<Reserva> reservas = reservaService.findAll();
         return new ResponseEntity<>(reservas, HttpStatus.OK);
     }
 
     // Endpoint para buscar uma reserva por ID
-    @GetMapping("/{id}")
+    @GetMapping("/reserva/{id}")
     public ResponseEntity<Reserva> getReservaById(@PathVariable Long id) {
         Reserva reserva = reservaService.findById(id);
         return new ResponseEntity<>(reserva, HttpStatus.OK);
     }
 
     // Endpoint para atualizar uma reserva por ID
-    @PutMapping("/{id}")
+    @PutMapping("/reserva/{id}")
     public ResponseEntity<String> updateReserva(@PathVariable Long id, @RequestBody ReservaDTO reservaDTO) {
         String response = reservaService.update(id, reservaDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // Endpoint para deletar uma reserva por ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/reserva/{id}")
     public ResponseEntity<String> deleteReserva(@PathVariable Long id) {
         String response = reservaService.deleteById(id);
         return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
