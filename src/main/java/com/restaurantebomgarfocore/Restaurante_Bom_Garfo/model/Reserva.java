@@ -28,14 +28,16 @@ public class Reserva implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private String email;
     private String date;
     private String time;
     private int numberPeople;
     private String observations;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Client client;
+   
 
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pagamento> pagamentos;

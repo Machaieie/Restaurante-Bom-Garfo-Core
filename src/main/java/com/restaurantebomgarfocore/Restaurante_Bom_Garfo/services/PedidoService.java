@@ -1,4 +1,5 @@
 package com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,9 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
-
 @Service
-public class PedidoService implements CRUDInterface<PedidoDTO,Long> {
+public class PedidoService implements CRUDInterface<PedidoDTO, Long> {
 
     @Autowired
     private PedidoRepository pedidoRepository;
@@ -28,16 +28,15 @@ public class PedidoService implements CRUDInterface<PedidoDTO,Long> {
     @Autowired
     private ReservaRepository reservaRepository;
 
-   
     @Transactional
     @Override
     public PedidoDTO save(PedidoDTO pedidoDTO) {
         // Converter PedidoDTO para Pedido
         Pedido pedido = new Pedido();
-        
+
         // Verificar se a reserva existe
         Reserva reserva = reservaRepository.findById(pedidoDTO.reserva_id())
-            .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
         // Configurar a reserva do pedido
         pedido.setReserva(reserva);
@@ -48,7 +47,7 @@ public class PedidoService implements CRUDInterface<PedidoDTO,Long> {
             itemPedido.setDescricaoItem(itemPedidoDTO.descricao());
             itemPedido.setQuantidade(itemPedidoDTO.quantidade());
             itemPedido.setNomeItem(itemPedidoDTO.nome());
-            itemPedido.setPedido(pedido);  // Associar o item ao pedido
+            itemPedido.setPedido(pedido); // Associar o item ao pedido
             return itemPedido;
         }).collect(Collectors.toList());
 
@@ -60,12 +59,12 @@ public class PedidoService implements CRUDInterface<PedidoDTO,Long> {
 
         // Converter o pedido salvo de volta para PedidoDTO
         List<ItemPedidoDTO> savedItensPedidoDTO = savedPedido.getItensPedido().stream().map(itemPedido -> {
-            return new ItemPedidoDTO(itemPedido.getDescricaoItem(), itemPedido.getQuantidade(), itemPedido.getNomeItem());
+            return new ItemPedidoDTO(itemPedido.getDescricaoItem(), itemPedido.getQuantidade(),
+                    itemPedido.getNomeItem());
         }).collect(Collectors.toList());
 
         return new PedidoDTO(savedPedido.getReserva().getId(), savedItensPedidoDTO);
     }
-   
 
     @Override
     public List<PedidoDTO> findAll() {
@@ -76,21 +75,24 @@ public class PedidoService implements CRUDInterface<PedidoDTO,Long> {
         return null;
     }
 
-
-
     @Override
     public PedidoDTO findById(Long id) throws ResourceNotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
+
+        List<ItemPedidoDTO> itensPedidoDTO = pedido.getItensPedido().stream()
+                .map(itemPedido -> new ItemPedidoDTO(itemPedido.getDescricaoItem(), itemPedido.getQuantidade(),
+                        itemPedido.getNomeItem()))
+                .collect(Collectors.toList());
+
+        return new PedidoDTO(pedido.getReserva().getId(), itensPedidoDTO);
     }
-
-
 
     @Override
     public void deleteById(Long id) throws ResourceNotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
+        pedidoRepository.delete(pedido);
     }
 
-    
 }
