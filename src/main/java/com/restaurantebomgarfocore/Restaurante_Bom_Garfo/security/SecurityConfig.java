@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/pedidos/**").permitAll()
                         .requestMatchers("/api/pagamentos/**").permitAll()
                         .requestMatchers("/api/reservas/**").permitAll()
+                        .requestMatchers("/api/pratos/**").permitAll()
                         .anyRequest().permitAll())
                 .userDetailsService(userService)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -47,7 +48,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public PasswordEncoder ppasswordEncoder( ){
+    public PasswordEncoder passwordEncoder( ){
         return new BCryptPasswordEncoder();
     }
 

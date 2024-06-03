@@ -21,7 +21,7 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     // Endpoint para criar um novo pedido
-    @PostMapping("adicionarPedido")
+    @PostMapping("/adicionarPedido")
     public ResponseEntity<PedidoDTO> createPedido(@RequestBody PedidoDTO pedidoDTO) {
         PedidoDTO savedPedidoDTO = pedidoService.save(pedidoDTO);
         return new ResponseEntity<>(savedPedidoDTO, HttpStatus.CREATED);
