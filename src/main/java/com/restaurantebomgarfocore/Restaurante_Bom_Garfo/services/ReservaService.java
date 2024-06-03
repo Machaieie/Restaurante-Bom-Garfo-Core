@@ -3,6 +3,7 @@ package com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.Reserva;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.ReservaDTO;
@@ -10,10 +11,14 @@ import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.exceptions.EmptyD
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.exceptions.ResourceNotFoundException;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.repository.ReservaRepository;
 
+@Service
 public class ReservaService {
 
     @Autowired
     private ReservaRepository reservaRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     public String save(ReservaDTO entity) throws ResourceNotFoundException {
         Reserva reserva = new Reserva();
@@ -25,8 +30,13 @@ public class ReservaService {
         reserva.setNumberPeople(entity.numberPeople());
         reserva.setObservations(entity.observations());
         reserva.setDate(entity.date());
-
+        
         reservaRepository.save(reserva);
+       // Prepare email content
+       String to = entity.email();
+       String subject = "Confirmação de Reserva";
+       String mailContent = "Olá " + entity.firstName() +"\nA sua reserva foi marcada para "+entity.date()+" as "+entity.time() +" para "+entity.numberPeople()+" pessoas";
+       emailService.send(to, subject, mailContent);
         return "Reserva Criada com sucesso";
     }
 
