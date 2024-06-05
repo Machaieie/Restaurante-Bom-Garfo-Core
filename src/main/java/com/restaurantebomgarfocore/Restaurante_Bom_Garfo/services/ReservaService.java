@@ -36,8 +36,26 @@ public class ReservaService {
        // Prepare email content
        String to = entity.email();
        String subject = "Confirmação de Reserva";
-       String mailContent = "Olá " + entity.firstName() +"\nA sua reserva foi marcada para "+entity.date()+" as "+entity.time() +" para "+entity.numberPeople()+" pessoas";
-       emailService.send(to, subject, mailContent);
+       String htmlContent = "<html>"
+       + "<body>"
+       + "<h2>Olá " + entity.firstName() + ",</h2>"
+       + "<p>A sua reserva foi confirmada!</p>"
+       + "<p>Detalhes da reserva:</p>"
+       + "<ul>"
+       + "<li>Data: " + entity.date() + "</li>"
+       + "<li>Hora: " + entity.time() + "</li>"
+       + "<li>Número de pessoas: " + entity.numberPeople() + "</li>"
+       + "</ul>"
+       + "<p>Esperamos vê-lo em breve no nosso restaurante!</p>"
+       + "<p>Se precisar de mais informações, entre em contato conosco pelo WhatsApp: "
+       + "+258 85 289 5627"
+       + "</p>"
+       + "<p>Atenciosamente,</p>"
+       + "<p>Restaurante Bom Garfo Dourado</p>"
+       + "</body>"
+       + "</html>";
+    //    String mailContent = "Olá " + entity.firstName() +"\nA sua reserva foi marcada para "+entity.date()+" as "+entity.time() +" para "+entity.numberPeople()+" pessoas";
+       emailService.send(to, subject, htmlContent);
         return "Reserva Criada com sucesso";
     }
 

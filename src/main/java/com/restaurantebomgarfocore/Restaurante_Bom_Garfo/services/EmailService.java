@@ -61,7 +61,7 @@ public class EmailService {
 			MimeMessage mimeMessage = emailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 			helper.setTo(to);
-			helper.setFrom("restaurantegarfodorado@gmail.com");
+			helper.setFrom("restaurantegarfodorado@gmail.com", "Restaurante Bom Garfo Dourado");
 			helper.setSubject(subject);
 			helper.setText(mail, true);
 			emailSender.send(mimeMessage);
