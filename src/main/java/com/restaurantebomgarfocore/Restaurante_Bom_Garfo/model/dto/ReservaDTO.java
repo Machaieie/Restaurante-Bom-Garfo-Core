@@ -7,7 +7,10 @@ public record ReservaDTO(
     @NotBlank String time,
     @NotBlank int numberPeople,
     @NotBlank String observations,
-    @NotBlank long clientId
+    @NotBlank String firstName,
+    @NotBlank String lastName,
+    @NotBlank String email,
+    @NotBlank String phone
 ) {
     
 }

@@ -27,24 +27,28 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+    
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        return httpSecurity.csrf(csrf -> csrf.disable())
-        .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HttpMethod.POST, "/login/**").permitAll()
-                .requestMatchers(HttpMethod.POST,"/register/**").permitAll()
-                .anyRequest()
-                .permitAll())
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                        .requestMatchers("/api/pedidos/**").permitAll()
+                        .requestMatchers("/api/pagamentos/**").permitAll()
+                        .requestMatchers("/api/reservas/**").permitAll()
+                        .requestMatchers("/api/pratos/**").permitAll()
+                        .anyRequest().permitAll())
                 .userDetailsService(userService)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(cors -> cors.disable())
                 .build();
     }
 
+
     @Bean
-    public PasswordEncoder ppasswordEncoder( ){
+    public PasswordEncoder passwordEncoder( ){
         return new BCryptPasswordEncoder();
     }
 
