@@ -13,6 +13,8 @@ import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.User;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.RegistrationRequestDTO;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services.AuthenticationService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController 
 @RequestMapping("api/auth")
 public class AuthenticationController {

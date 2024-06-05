@@ -30,8 +30,9 @@ public class ReservaService {
         reserva.setNumberPeople(entity.numberPeople());
         reserva.setObservations(entity.observations());
         reserva.setDate(entity.date());
-        
+        reserva.criarConta();
         reservaRepository.save(reserva);
+        
        // Prepare email content
        String to = entity.email();
        String subject = "Confirmação de Reserva";

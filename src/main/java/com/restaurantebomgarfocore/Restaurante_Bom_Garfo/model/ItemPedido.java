@@ -22,7 +22,10 @@ public class ItemPedido {
     @ManyToOne
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
-    private String nomeItem;
-    private String descricaoItem;
+
+    @ManyToOne
+    @JoinColumn(name = "prato_id")
+    private Prato prato;
+
     private int quantidade;
 }

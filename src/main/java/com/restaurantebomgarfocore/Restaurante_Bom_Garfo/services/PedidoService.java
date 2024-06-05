@@ -5,16 +5,17 @@ import java.util.stream.Collectors;
 
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.ItemPedido;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.Pedido;
+import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.Prato;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.Reserva;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.ItemPedidoDTO;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.PedidoDTO;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.exceptions.EmptyDatabaseException;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.exceptions.ResourceNotFoundException;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.repository.PedidoRepository;
+import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.repository.PratoRepository;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.repository.ReservaRepository;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.interfaces.CRUDInterface;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
@@ -27,6 +28,9 @@ public class PedidoService implements CRUDInterface<PedidoDTO, Long> {
 
     @Autowired
     private ReservaRepository reservaRepository;
+
+    @Autowired
+    private PratoRepository pratoRepository;
 
     @Transactional
     @Override
@@ -44,9 +48,13 @@ public class PedidoService implements CRUDInterface<PedidoDTO, Long> {
         // Converter e adicionar os itens do pedido
         List<ItemPedido> itensPedido = pedidoDTO.itensPedido().stream().map(itemPedidoDTO -> {
             ItemPedido itemPedido = new ItemPedido();
-            itemPedido.setDescricaoItem(itemPedidoDTO.descricao());
             itemPedido.setQuantidade(itemPedidoDTO.quantidade());
-            itemPedido.setNomeItem(itemPedidoDTO.nome());
+
+            // Verificar se o prato existe
+            Prato prato = pratoRepository.findById(itemPedidoDTO.pratoId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Prato não encontrado"));
+
+            itemPedido.setPrato(prato);
             itemPedido.setPedido(pedido); // Associar o item ao pedido
             return itemPedido;
         }).collect(Collectors.toList());
@@ -57,10 +65,13 @@ public class PedidoService implements CRUDInterface<PedidoDTO, Long> {
         // Salvar o pedido e obter o pedido salvo
         Pedido savedPedido = pedidoRepository.save(pedido);
 
+        // Calcular e atualizar o total da conta da reserva
+        double totalConta = reserva.getConta().calcularTotal();
+        reserva.getConta().setTotal(totalConta);
+
         // Converter o pedido salvo de volta para PedidoDTO
         List<ItemPedidoDTO> savedItensPedidoDTO = savedPedido.getItensPedido().stream().map(itemPedido -> {
-            return new ItemPedidoDTO(itemPedido.getDescricaoItem(), itemPedido.getQuantidade(),
-                    itemPedido.getNomeItem());
+            return new ItemPedidoDTO(itemPedido.getQuantidade(), itemPedido.getPrato().getId());
         }).collect(Collectors.toList());
 
         return new PedidoDTO(savedPedido.getReserva().getId(), savedItensPedidoDTO);
@@ -72,7 +83,12 @@ public class PedidoService implements CRUDInterface<PedidoDTO, Long> {
         if (pedidos.isEmpty()) {
             throw new EmptyDatabaseException("Nenhum pedido foi encontrado");
         }
-        return null;
+        return pedidos.stream().map(pedido -> {
+            List<ItemPedidoDTO> itensPedidoDTO = pedido.getItensPedido().stream()
+                    .map(itemPedido -> new ItemPedidoDTO(itemPedido.getQuantidade(), itemPedido.getPrato().getId()))
+                    .collect(Collectors.toList());
+            return new PedidoDTO(pedido.getReserva().getId(), itensPedidoDTO);
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -81,8 +97,7 @@ public class PedidoService implements CRUDInterface<PedidoDTO, Long> {
                 .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
 
         List<ItemPedidoDTO> itensPedidoDTO = pedido.getItensPedido().stream()
-                .map(itemPedido -> new ItemPedidoDTO(itemPedido.getDescricaoItem(), itemPedido.getQuantidade(),
-                        itemPedido.getNomeItem()))
+                .map(itemPedido -> new ItemPedidoDTO(itemPedido.getQuantidade(), itemPedido.getPrato().getId()))
                 .collect(Collectors.toList());
 
         return new PedidoDTO(pedido.getReserva().getId(), itensPedidoDTO);
@@ -95,4 +110,12 @@ public class PedidoService implements CRUDInterface<PedidoDTO, Long> {
         pedidoRepository.delete(pedido);
     }
 
+    public double getTotalContaByReservaId(Long reservaId) {
+        // Verificar se a reserva existe
+        Reserva reserva = reservaRepository.findById(reservaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
+
+        // Calcular o total da conta
+        return reserva.getConta().calcularTotal();
+    }
 }

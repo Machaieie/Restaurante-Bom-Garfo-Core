@@ -10,7 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,5 +46,15 @@ public class Reserva implements Serializable{
 
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pedido> pedidos;
+
+    @OneToOne(mappedBy = "reserva", cascade = CascadeType.ALL)
+    private Conta conta;
+
+  
+    public void criarConta() {
+        this.conta = new Conta();
+        this.conta.setReserva(this);
+        this.conta.setTotal(0.0); 
+    }
 
 }

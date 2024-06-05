@@ -2,6 +2,7 @@ package com.restaurantebomgarfocore.Restaurante_Bom_Garfo.controller;
 
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.Reserva;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.ReservaDTO;
+import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services.PedidoService;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,9 @@ public class ReservaController {
 
     @Autowired
     private ReservaService reservaService;
+
+     @Autowired
+    private PedidoService pedidoService;
 
     // Endpoint para criar uma nova reserva
     @PostMapping("/adicionarReserva")
@@ -50,5 +54,10 @@ public class ReservaController {
     public ResponseEntity<String> deleteReserva(@PathVariable Long id) {
         String response = reservaService.deleteById(id);
         return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{reservaId}/conta")
+    public double getTotalConta(@PathVariable Long reservaId) {
+        return pedidoService.getTotalContaByReservaId(reservaId);
     }
 }

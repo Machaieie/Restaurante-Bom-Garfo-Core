@@ -36,8 +36,12 @@ public class Pedido implements Serializable {
     private Reserva reserva;
     
     public void addItemPedido(ItemPedido item) {
+        // Adiciona o item ao pedido
         itensPedido.add(item);
         item.setPedido(this);
+        
+        // Atualiza o total da conta ao adicionar um novo item de pedido
+        reserva.getConta().calcularTotal();
     }
     
     public void removeItemPedido(ItemPedido item) {
