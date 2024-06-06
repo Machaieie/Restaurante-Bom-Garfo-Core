@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController 
 @RequestMapping("api/auth")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthenticationController {
      @Autowired
     private AuthenticationService authenticationService;
