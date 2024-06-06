@@ -2,6 +2,7 @@ package com.restaurantebomgarfocore.Restaurante_Bom_Garfo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController 
 @RequestMapping("api/auth")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthenticationController {
      @Autowired
     private AuthenticationService authenticationService;
