@@ -3,6 +3,8 @@ package com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model;
 import java.io.Serializable;
 import java.util.List ;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,12 +44,15 @@ public class Reserva implements Serializable{
    
 
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Pagamento> pagamentos;
 
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Pedido> pedidos;
 
     @OneToOne(mappedBy = "reserva", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Conta conta;
 
   

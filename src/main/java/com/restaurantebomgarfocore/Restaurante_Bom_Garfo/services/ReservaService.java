@@ -1,12 +1,14 @@
 package com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.Reserva;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.ReservaDTO;
+import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.ReservaResponseDTO;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.exceptions.EmptyDatabaseException;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.exceptions.ResourceNotFoundException;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.repository.ReservaRepository;
@@ -55,7 +57,6 @@ public class ReservaService {
        + "<p>Restaurante Bom Garfo Dourado</p>"
        + "</body>"
        + "</html>";
-    //    String mailContent = "Olá " + entity.firstName() +"\nA sua reserva foi marcada para "+entity.date()+" as "+entity.time() +" para "+entity.numberPeople()+" pessoas";
        emailService.send(to, subject, htmlContent);
         return "Reserva Criada com sucesso";
     }
@@ -65,19 +66,30 @@ public class ReservaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva com id: " + id + " não encontrada"));
     }
 
-    public List<Reserva> findAll() {
+    public List<ReservaResponseDTO> findAll() {
         List<Reserva> reservas = reservaRepository.findAll();
         if (reservas.isEmpty()) {
             throw new EmptyDatabaseException("Nenhuma reserva foi encontrada");
         }
-        return reservas;
+        return reservas.stream()
+                .map(reserva -> new ReservaResponseDTO(
+                        reserva.getId(),
+                        reserva.getDate(),
+                        reserva.getTime(),
+                        reserva.getNumberPeople(),
+                        reserva.getObservations(),
+                        reserva.getFirstName(),
+                        reserva.getLastName(),
+                        reserva.getEmail(),
+                        reserva.getPhone()
+                ))
+                .collect(Collectors.toList());
     }
 
     public String deleteById(Long id) throws IllegalArgumentException {
         Reserva foundedReserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva com id: " + id + " não encontrada"));
         reservaRepository.delete(foundedReserva);
-
         return "Reserva excluida com sucesso";
     }
 
@@ -101,4 +113,7 @@ public class ReservaService {
         return "Reserva atualizada com sucesso";
     }
 
+    public long countAllReservas() {
+        return reservaRepository.count();
+    }
 }

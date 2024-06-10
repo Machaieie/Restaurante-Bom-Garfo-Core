@@ -13,6 +13,7 @@ import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services.PratoService;
 
 @RestController
 @RequestMapping("/api/pratos")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PratoController {
 
     @Autowired
