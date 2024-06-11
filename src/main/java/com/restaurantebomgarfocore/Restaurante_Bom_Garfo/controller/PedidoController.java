@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/pedidos")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PedidoController {
 
     @Autowired
@@ -48,6 +49,10 @@ public class PedidoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    
+    @GetMapping("/contarPedidos")
+    public ResponseEntity<Long> countAllReservas() {
+        long totalPedidos = pedidoService.countAllPedidos();
+        return new ResponseEntity<>(totalPedidos, HttpStatus.OK);
+    }
 
 }

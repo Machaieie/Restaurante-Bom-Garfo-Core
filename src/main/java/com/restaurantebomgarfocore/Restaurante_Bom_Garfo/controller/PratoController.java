@@ -65,4 +65,9 @@ public class PratoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/contarPratos")
+    public ResponseEntity<Long> countAllReservas() {
+        long totalPratos = pratoService.countAllPratos();
+        return new ResponseEntity<>(totalPratos, HttpStatus.OK);
+    }
 }
