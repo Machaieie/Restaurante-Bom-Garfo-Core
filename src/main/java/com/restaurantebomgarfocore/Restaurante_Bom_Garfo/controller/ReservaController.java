@@ -1,6 +1,8 @@
 package com.restaurantebomgarfocore.Restaurante_Bom_Garfo.controller;
 
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.Reserva;
+import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.PratoDTO;
+import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.ReservaConta;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.ReservaDTO;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.ReservaResponseDTO;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services.PedidoService;
@@ -11,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/reservas")
@@ -79,4 +83,39 @@ public class ReservaController {
         long totalReservas = reservaService.countAllReservas();
         return new ResponseEntity<>(totalReservas, HttpStatus.OK);
     }
+
+    @GetMapping("/reservasComContas")
+    public ResponseEntity<List<ReservaConta>> getAllReservasComContas() {
+        List<ReservaConta> reservasComContas = reservaService.findAllReservasComContas();
+        return new ResponseEntity<>(reservasComContas, HttpStatus.OK);
+    }
+ // Endpoint para retornar os pratos associados a cada reserva
+ @GetMapping("/pratosPorReserva")
+ public ResponseEntity<Map<ReservaResponseDTO, List<PratoDTO>>> getPratosPorReserva() {
+     Map<Reserva, List<PratoDTO>> pratosPorReserva = reservaService.findPratosPorReserva();
+
+     // Converte as chaves de Reserva para ReservaResponseDTO
+     Map<ReservaResponseDTO, List<PratoDTO>> pratosPorReservaResponseDTO = pratosPorReserva.entrySet().stream()
+             .collect(Collectors.toMap(
+                     entry -> convertToReservaResponseDTO(entry.getKey()),
+                     Map.Entry::getValue
+             ));
+
+     return new ResponseEntity<>(pratosPorReservaResponseDTO, HttpStatus.OK);
+ }
+
+ // Método utilitário para converter Reserva para ReservaResponseDTO
+ private ReservaResponseDTO convertToReservaResponseDTO(Reserva reserva) {
+     return new ReservaResponseDTO(
+             reserva.getId(),
+             reserva.getDate(),
+             reserva.getTime(),
+             reserva.getNumberPeople(),
+             reserva.getObservations(),
+             reserva.getFirstName(),
+             reserva.getLastName(),
+             reserva.getEmail(),
+             reserva.getPhone()
+     );
+ }
 }
