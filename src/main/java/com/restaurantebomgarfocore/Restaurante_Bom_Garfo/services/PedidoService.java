@@ -118,4 +118,8 @@ public class PedidoService implements CRUDInterface<PedidoDTO, Long> {
         // Calcular o total da conta
         return reserva.getConta().calcularTotal();
     }
+
+    public long countAllPedidos() {
+        return pedidoRepository.count();
+    }
 }

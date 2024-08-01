@@ -13,6 +13,7 @@ import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services.PratoService;
 
 @RestController
 @RequestMapping("/api/pratos")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PratoController {
 
     @Autowired
@@ -63,5 +64,10 @@ public class PratoController {
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+    @GetMapping("/contarPratos")
+    public ResponseEntity<Long> countAllReservas() {
+        long totalPratos = pratoService.countAllPratos();
+        return new ResponseEntity<>(totalPratos, HttpStatus.OK);
     }
 }
