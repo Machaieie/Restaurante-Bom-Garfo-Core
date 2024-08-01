@@ -65,12 +65,15 @@ public class ReservaController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // Endpoint para deletar uma reserva por ID
-    @DeleteMapping("/reserva/{id}")
-    public ResponseEntity<String> deleteReserva(@PathVariable Long id) {
-        String response = reservaService.deleteById(id);
-        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-    }
+     // Endpoint para deletar uma reserva por ID ou vários IDs separados por vírgula
+     @DeleteMapping("/reserva/{ids}")
+     public ResponseEntity<String> deleteReserva(@PathVariable String ids) {
+         String[] idArray = ids.split(",");
+         for (String id : idArray) {
+             reservaService.deleteById(Long.parseLong(id));
+         }
+         return new ResponseEntity<>("Reservas deletadas com sucesso", HttpStatus.NO_CONTENT);
+     }
 
     @GetMapping("/{reservaId}/conta")
     public double getTotalConta(@PathVariable Long reservaId) {
