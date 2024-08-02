@@ -3,6 +3,7 @@ package com.restaurantebomgarfocore.Restaurante_Bom_Garfo.controller;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.Pedido;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.ItemPedidoDTO;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.PedidoDTO;
+import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.dto.PedidoDetalhadoDTO;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.model.exceptions.ResourceNotFoundException;
 import com.restaurantebomgarfocore.Restaurante_Bom_Garfo.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/pedidos")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class PedidoController {
 
     @Autowired
@@ -48,6 +51,10 @@ public class PedidoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    
+    @GetMapping("/detalhados")
+    public ResponseEntity<List<PedidoDetalhadoDTO>> getAllPedidosDetalhados() {
+        List<PedidoDetalhadoDTO> pedidosDetalhados = pedidoService.getAllPedidosDetalhados();
+        return ResponseEntity.ok(pedidosDetalhados);
+    }
 
 }
