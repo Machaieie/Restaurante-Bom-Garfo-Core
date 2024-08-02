@@ -136,4 +136,7 @@ public class PedidoService implements CRUDInterface<PedidoDTO, Long> {
             )
         ).collect(Collectors.toList());
     }
+    public long countAllPedidos() {
+        return pedidoRepository.count();
+    }
 }

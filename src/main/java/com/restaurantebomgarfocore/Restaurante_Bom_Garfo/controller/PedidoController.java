@@ -51,10 +51,17 @@ public class PedidoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     @GetMapping("/detalhados")
     public ResponseEntity<List<PedidoDetalhadoDTO>> getAllPedidosDetalhados() {
         List<PedidoDetalhadoDTO> pedidosDetalhados = pedidoService.getAllPedidosDetalhados();
         return ResponseEntity.ok(pedidosDetalhados);
+    }
+    @GetMapping("/contarPedidos")
+    public ResponseEntity<Long> countAllReservas() {
+        long totalPedidos = pedidoService.countAllPedidos();
+        return new ResponseEntity<>(totalPedidos, HttpStatus.OK);
+
     }
 
 }

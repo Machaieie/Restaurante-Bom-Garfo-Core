@@ -52,5 +52,7 @@ public class PratoService implements CRUDInterface<Prato, Long> {
     
         return pratoRepository.save(existingPrato);
     }
-    
+    public long countAllPratos() {
+        return pratoRepository.count();
+    }
 }
