@@ -9,7 +9,7 @@ public record ReservaDTO(
     @NotBlank String time,
     @Min(1) int numberPeople,
     @NotBlank String observations,
-    String observations,
+
     @NotBlank String firstName,
     @NotBlank String lastName,
     @Email @NotBlank String email,
